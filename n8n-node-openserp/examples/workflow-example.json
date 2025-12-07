@@ -1,0 +1,138 @@
+{
+  "name": "OpenSERP Search Example",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "d4f2c8b0-1234-5678-9abc-def123456789",
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "engine": "yandex",
+        "query": "Экономическая безопасность",
+        "lang": "ru",
+        "limit": 10
+      },
+      "id": "a1b2c3d4-5678-90ab-cdef-1234567890ab",
+      "name": "OpenSERP",
+      "type": "n8n-nodes-openserp.openSERP",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "credentials": {
+        "openSERPApi": {
+          "id": "1",
+          "name": "OpenSERP API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Обработка результатов поиска\nconst results = $input.all()[0].json.results;\n\n// Фильтрация результатов без рекламы\nconst filteredResults = results.filter(result => !result.ad);\n\n// Добавление дополнительной информации\nconst processedResults = filteredResults.map((result, index) => {\n  return {\n    ...result,\n    processed_at: new Date().toISOString(),\n    domain: new URL(result.url).hostname,\n    result_number: index + 1\n  };\n});\n\nreturn { processedResults };"
+      },
+      "id": "e5f6g7h8-9012-3456-789a-bcdef0123456",
+      "name": "Process Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.processedResults[0].url }}",
+        "options": {}
+      },
+      "id": "i7j8k9l0-1234-5678-90ab-cdef12345678",
+      "name": "Get First Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        900,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.processedResults[1].url }}",
+        "options": {}
+      },
+      "id": "m1n2o3p4-5678-90ab-cdef-1234567890ab",
+      "name": "Get Second Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        900,
+        400
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "OpenSERP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenSERP": {
+      "main": [
+        [
+          {
+            "node": "Process Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Results": {
+      "main": [
+        [
+          {
+            "node": "Get First Page",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Second Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "id": "workflow-example",
+  "tags": [
+    {
+      "createdAt": "2023-12-07T15:00:00.000Z",
+      "updatedAt": "2023-12-07T15:00:00.000Z",
+      "id": "1",
+      "name": "OpenSERP"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "name": "n8n-nodes-openserp",
+  "version": "1.0.0",
+  "description": "n8n nodes for OpenSERP search engine integration",
+  "keywords": [
+    "n8n-community-node-package"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sergeevgit1/openserp",
+  "author": {
+    "name": "Dmitrij Zaruba",
+    "email": "your-email@example.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sergeevgit1/openserp.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "format": "prettier nodes --write",
+    "lint": "eslint nodes package.json",
+    "lint:fix": "eslint nodes package.json --fix",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/OpenSERPApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/OpenSERP/OpenSERP.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.6.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "eslint": "^8.50.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "jest": "^29.7.0",
+    "n8n-workflow": "*",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "n8n-core": "*",
+    "n8n-workflow": "*"
+  }
+}
