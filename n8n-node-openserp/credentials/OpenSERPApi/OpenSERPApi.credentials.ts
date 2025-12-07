@@ -1,5 +1,5 @@
 import {
-	IAuthenticateGeneric,
+	ICredentialDataDecryptedObject,
 	ICredentialTestRequest,
 	ICredentialType,
 	IHttpRequestOptions,
@@ -32,12 +32,9 @@ export class OpenSERPApi implements ICredentialType {
 	];
 
 	async authenticate(
-		this: IAuthenticateGeneric,
-		credentialType: string,
+		credentials: ICredentialDataDecryptedObject,
 		request: IHttpRequestOptions,
 	): Promise<IHttpRequestOptions> {
-		const credentials = await this.getCredentials(credentialType);
-		
 		// Add API key to headers if provided
 		if (credentials.apiKey) {
 			if (!request.headers) {
