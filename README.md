@@ -2,6 +2,8 @@
 
 ![OpenSERP](/logo.svg)
 
+**📖 Документация на русском языке:** [README_RU.md](README_RU.md)
+
 [![Go Report Card](https://goreportcard.com/badge/github.com/karust/openserp)](https://goreportcard.com/report/github.com/karust/openserp)
 [![Go Reference](https://pkg.go.dev/badge/github/karust/openserp?style=for-the-badge)](https://pkg.go.dev/github.com/karust/openserp)
 [![release](https://img.shields.io/github/release/karust/openserp)](https://github.com/karust/openserp/releases)
