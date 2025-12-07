@@ -84,30 +84,66 @@ func (yand *Yandex) parseResults(results rod.Elements, pageNum int) []core.Searc
 			yand.logger.Error("Missing href")
 		}
 
-		// Get title
-		titleTag, err := link.Element("h2")
-		if err != nil {
-			yand.logger.Error("Missing h2 title")
-			continue
+		// Try different selectors for title based on new Yandex structure
+		var title string
+		titleTag, err := r.Element("h2")
+		if err == nil {
+			title, err = titleTag.Text()
+			if err != nil {
+				yand.logger.Error("Failed to extract h2 title")
+				title = "No title"
+			}
+		} else {
+			// Try alternative selectors for title
+			titleTag, err = r.Element(".organic__title")
+			if err == nil {
+				title, err = titleTag.Text()
+				if err != nil {
+					yand.logger.Error("Failed to extract organic__title")
+					title = "No title"
+				}
+			} else {
+				// Try another selector
+				titleTag, err = r.Element(".OrganicTitle")
+				if err == nil {
+					title, err = titleTag.Text()
+					if err != nil {
+						yand.logger.Error("Failed to extract OrganicTitle")
+						title = "No title"
+					}
+				} else {
+					// Try to get title from link text as fallback
+					title, err = link.Text()
+					if err != nil {
+						yand.logger.Error("Failed to extract link text as title")
+						title = "No title"
+					}
+				}
+			}
 		}
 
-		title, err := titleTag.Text()
-		if err != nil {
-			yand.logger.Error("Failed to extract title")
-			title = "No title"
-		}
-
-		// Get description
-		descTag, err := r.Element(`span.OrganicTextContentSpan`)
+		// Get description - try multiple selectors
 		desc := ""
+		descTag, err := r.Element(`span.OrganicTextContentSpan`)
 		if err != nil {
-			yand.logger.Debug("No description")
+			// Try alternative description selectors
+			descTag, err = r.Element(".organic__content")
+			if err != nil {
+				descTag, err = r.Element(".OrganicText")
+				if err != nil {
+					yand.logger.Debug("No description found with any selector")
+				} else {
+					desc = descTag.MustText()
+				}
+			} else {
+				desc = descTag.MustText()
+			}
 		} else {
 			desc = descTag.MustText()
 		}
 
-		r := core.SearchResult{Rank: (pageNum * 10) + (i + 1), URL: linkText.String(), Title: title, Description: desc}
-		searchResults = append(searchResults, r)
+		result := core.SearchResult{Rank: (pageNum * 10) + (i + 1), URL: linkText.String(), Title: title, Description: desc}
+		searchResults = append(searchResults, result)
 	}
 
 	return searchResults
@@ -130,12 +166,22 @@ func (yand *Yandex) Search(query core.Query) ([]core.SearchResult, error) {
 			return nil, err
 		}
 
-		// Get all search results in page
-		searchRes, err := page.Timeout(yand.Timeout).Search("li.serp-item")
+		// Get all search results in page - try multiple selectors
+		var searchRes *rod.SearchResult
+		
+		// Try original selector first
+		searchRes, err = page.Timeout(yand.Timeout).Search("li.serp-item")
 		if err != nil {
-			defer page.Close()
-			yand.logger.Error("Cannot parse search results: %s", err)
-			return nil, core.ErrSearchTimeout
+			// Try alternative selectors
+			searchRes, err = page.Timeout(yand.Timeout).Search("li[data-cid]")
+			if err != nil {
+				searchRes, err = page.Timeout(yand.Timeout).Search("div.organic")
+				if err != nil {
+					defer page.Close()
+					yand.logger.Error("Cannot parse search results with any selector: %s", err)
+					return nil, core.ErrSearchTimeout
+				}
+			}
 		}
 
 		// Check why no results, maybe captcha?
