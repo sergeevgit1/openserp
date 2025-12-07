@@ -54,7 +54,7 @@
 3. Нажмите на иконку учетных данных (Add credential)
 4. Выберите "OpenSERP API"
 5. Заполните поля:
-   - **API URL**: `https://service-openserp-atqw0l-b0f07b-185-245-34-200.traefik.me`
+   - **API URL**: `https://your-openserp-instance.com`
    - **API Key**: (если требуется) ваш API ключ
 6. Нажмите "Save"
 

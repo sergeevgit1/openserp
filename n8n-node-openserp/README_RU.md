@@ -36,7 +36,7 @@ npm install n8n-nodes-openserp
 1. Создайте новые учетные данные в n8n
 2. Выберите **"OpenSERP API"**
 3. Заполните:
-   - **API URL**: `https://service-openserp-atqw0l-b0f07b-185-245-34-200.traefik.me`
+   - **API URL**: `https://your-openserp-instance.com`
    - **API Key**: (если требуется)
 
 ## 📖 Документация

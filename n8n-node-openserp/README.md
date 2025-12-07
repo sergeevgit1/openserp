@@ -60,7 +60,7 @@ The OpenSERP node allows you to search across multiple search engines including 
 
 To use the OpenSERP node, you need to configure the OpenSERP API credentials:
 
-1. **API URL**: URL of the OpenSERP API service (default: https://service-openserp-atqw0l-b0f07b-185-245-34-200.traefik.me)
+1. **API URL**: URL of the OpenSERP API service (default: https://your-openserp-instance.com)
 2. **API Key**: API Key for authentication (if required)
 
 ## Output

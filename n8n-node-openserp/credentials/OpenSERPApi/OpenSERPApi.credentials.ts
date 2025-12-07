@@ -15,7 +15,7 @@ export class OpenSERPApi implements ICredentialType {
 			displayName: 'API URL',
 			name: 'apiUrl',
 			type: 'string',
-			default: 'https://service-openserp-atqw0l-b0f07b-185-245-34-200.traefik.me',
+			default: 'https://your-openserp-instance.com',
 			required: true,
 			description: 'URL of the OpenSERP API service',
 		},
