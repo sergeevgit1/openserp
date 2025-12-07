@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-openserp",
-  "version": "1.0.1",
+  "version": "1.0.8",
   "description": "n8n nodes for OpenSERP search engine integration",
   "keywords": [
     "n8n-community-node-package"
@@ -31,7 +31,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/OpenSERPApi.credentials.js"
+      "dist/credentials/OpenSERPApi/OpenSERPApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/OpenSERP/OpenSERP.node.js"

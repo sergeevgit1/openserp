@@ -49,6 +49,11 @@ export class OpenSERP implements INodeType {
 						value: 'getEngines',
 						description: 'Get available search engines',
 					},
+					{
+						name: 'Health Check',
+						value: 'healthCheck',
+						description: 'Check service health status',
+					},
 				],
 				default: 'search',
 			},
@@ -189,6 +194,9 @@ export class OpenSERP implements INodeType {
 
 				if (operation === 'getEngines') {
 					const response = await axios.get(`${apiUrl}/mega/engines`, { headers });
+					responseData = response.data;
+				} else if (operation === 'healthCheck') {
+					const response = await axios.get(`${apiUrl}/health`, { headers });
 					responseData = response.data;
 				} else if (operation === 'search' || operation === 'imageSearch') {
 					const engine = this.getNodeParameter('engine', i) as string;

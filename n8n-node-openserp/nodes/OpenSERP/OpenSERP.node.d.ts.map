@@ -1,0 +1,1 @@
+{"version":3,"file":"OpenSERP.node.d.ts","sourceRoot":"","sources":["OpenSERP.node.ts"],"names":[],"mappings":"AAAA,OAAO,EACN,iBAAiB,EACjB,kBAAkB,EAClB,SAAS,EACT,oBAAoB,EAGpB,MAAM,cAAc,CAAC;AAItB,qBAAa,QAAS,YAAW,SAAS;IACzC,WAAW,EAAE,oBAAoB,CAyJ/B;IAEI,OAAO,CAAC,IAAI,EAAE,iBAAiB,GAAG,OAAO,CAAC,kBAAkB,EAAE,EAAE,CAAC;CAmEvE"}

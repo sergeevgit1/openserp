@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/karust/openserp/core"
 	"github.com/sirupsen/logrus"
@@ -156,6 +158,67 @@ func initializeConfig(cmd *cobra.Command) error {
 		v.Debug()
 	}
 	return nil
+}
+
+// runHealthCheck performs a health check on the OpenSERP service
+func runHealthCheck(cmd *cobra.Command, args []string) {
+	// Load configuration
+	config, err := loadConfig()
+	if err != nil {
+		logrus.Error(err)
+		return
+	}
+	
+	// Create HTTP client
+	client := &http.Client{
+		Timeout: time.Duration(config.App.Timeout) * time.Second,
+	}
+	
+	// Make health check request
+	url := fmt.Sprintf("http://%s:%d/health", config.App.Host, config.App.Port)
+	resp, err := client.Get(url)
+	if err != nil {
+		logrus.Errorf("Health check failed: %v", err)
+		return
+	}
+	
+	// Check response status
+	if resp.StatusCode != 200 {
+		logrus.Errorf("Service unhealthy: HTTP %d", resp.StatusCode)
+		return
+	}
+	
+	logrus.Info("Service is healthy")
+}
+
+// loadConfig loads the configuration from file or environment variables
+func loadConfig() (*Config, error) {
+	v := viper.New()
+	
+	// Set configuration file name and paths
+	v.SetConfigName(defaultConfigFilename)
+	v.AddConfigPath(".")
+	
+	// Read configuration file
+	if err := v.ReadInConfig(); err != nil {
+		logrus.Warnf("Cannot read config: %v", err)
+	}
+	
+	// Bind environment variables
+	for _, key := range v.AllKeys() {
+		envKey := envPrefix + "_" + strings.ToUpper(strings.ReplaceAll(key, ".", "_"))
+		if err := v.BindEnv(key, envKey); err != nil {
+			logrus.Errorf("Unable to bind ENV value: %v", err)
+		}
+	}
+	
+	// Unmarshal config to struct
+	var cfg Config
+	if err := v.Unmarshal(&cfg); err != nil {
+		return nil, fmt.Errorf("cannot unmarshal config: %v", err)
+	}
+	
+	return &cfg, nil
 }
 
 func init() {

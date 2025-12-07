@@ -1,128 +1,154 @@
 # n8n-nodes-openserp
 
-This is an n8n community node package that provides integration with the OpenSERP search engine API.
+[![npm version](https://badge.fury.io/js/n8n-nodes-openserp.svg)](https://badge.fury.io/js/n8n-nodes-openserp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Installation
+n8n nodes for OpenSERP search engine integration
 
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n documentation.
+## 🚀 Возможности
 
-## Usage
+- Интеграция с OpenSERP API
+- Поддержка различных поисковых систем (Google, Yandex, Baidu, Bing, DuckDuckGo)
+- Проверка здоровья сервиса
+- Гибкая настройка параметров поиска
 
-### Search with OpenSERP
+## 📦 Установка
 
-The OpenSERP node allows you to search across multiple search engines including Google, Yandex, Bing, Baidu, and DuckDuckGo.
+### Через интерфейс n8n (рекомендуется)
 
-#### Operations
+1. Откройте n8n
+2. Перейдите в **Settings → Community Nodes**
+3. Нажмите **"Install a community node"**
+4. Введите: `n8n-nodes-openserp@1.0.8`
+5. Нажмите **"Install"**
+6. Перезапустите n8n, если потребуется
 
-1. **Search**: Search for web results
-2. **Image Search**: Search for images
-3. **Get Engines**: Get available search engines
+### Через командную строку
 
-#### Parameters
+```bash
+npm install n8n-nodes-openserp@1.0.8
+```
 
-- **Search Engine**: Choose from Google, Yandex, Bing, Baidu, DuckDuckGo, or All (Mega Search)
-- **Search Query**: The search query to execute (required)
-- **Language**: Language code (e.g., ru, en, es)
-- **Limit**: Maximum number of results to return (default: 10)
-- **Site**: Search only on specific site (optional)
-- **File Type**: File extension to search (e.g., pdf, doc) (optional)
-- **Date Range**: Date range in format YYYYMMDD..YYYYMMDD (optional)
+Подробная информация об установке доступна в [INSTALLATION.md](./INSTALLATION.md)
 
-#### Example Usage
+## 🔧 Использование
 
-1. **Basic Search**:
-   - Operation: Search
-   - Search Engine: Yandex
-   - Search Query: "Экономическая безопасность"
-   - Language: ru
-   - Limit: 10
+### Настройка учетных данных
 
-2. **Site-specific Search**:
-   - Operation: Search
-   - Search Engine: Google
-   - Search Query: "machine learning"
-   - Site: "arxiv.org"
-   - Limit: 5
+1. В n8n создайте новые учетные данные "OpenSERP API"
+2. Укажите ваш API ключ (если требуется)
+3. Сохраните учетные данные
 
-3. **Image Search**:
-   - Operation: Image Search
-   - Search Engine: Yandex
-   - Search Query: "nature"
-   - Limit: 15
+### Создание workflow
 
-4. **Mega Search**:
-   - Operation: Search
-   - Search Engine: All (Mega Search)
-   - Search Query: "artificial intelligence"
-   - Limit: 20
+1. Добавьте узел "OpenSERP" в ваш workflow
+2. Выберите операцию:
+   - **Search** - выполнение поиска
+   - **Health Check** - проверка здоровья сервиса
+3. Настройте параметры:
+   - Поисковая система (Google, Yandex, Baidu, Bing, DuckDuckGo)
+   - Запрос для поиска
+   - Количество результатов
+   - Язык и регион
+   - Дополнительные параметры
+4. Подключите учетные данные
+5. Запустите workflow
 
-## Credentials
-
-To use the OpenSERP node, you need to configure the OpenSERP API credentials:
-
-1. **API URL**: URL of the OpenSERP API service (default: https://your-openserp-instance.com)
-2. **API Key**: API Key for authentication (if required)
-
-## Output
-
-The node returns search results in the following format:
+### Пример workflow
 
 ```json
 {
-  "results": [
+  "name": "OpenSERP Search Example",
+  "nodes": [
     {
-      "rank": 1,
-      "url": "https://example.com/page1",
-      "title": "Page Title",
-      "description": "Page description",
-      "ad": false,
-      "engine": "yandex" // Only for mega search
-    },
-    // ... more results
+      "parameters": {
+        "operation": "search",
+        "engine": "google",
+        "query": "n8n workflow automation",
+        "limit": 10
+      },
+      "name": "OpenSERP",
+      "type": "n8n-nodes-openserp.OpenSERP",
+      "typeVersion": 1,
+      "position": [240, 300]
+    }
   ]
 }
 ```
 
-For the "Get Engines" operation, the output format is:
+Больше примеров в [USAGE_EXAMPLES.md](./USAGE_EXAMPLES.md)
 
-```json
-{
-  "engines": [
-    {
-      "name": "google",
-      "initialized": true
-    },
-    {
-      "name": "yandex",
-      "initialized": true
-    }
-    // ... more engines
-  ],
-  "total": 2
-}
-```
+## 🆕 Версия 1.0.8
 
-## Development
+### Исправления и улучшения
 
-To build the package:
+- ✅ **Исправлена проблема с загрузкой модулей** - решена ошибка "Cannot find module OpenSERPApi.credentials.js"
+- ✅ **Правильная структура директории dist** - все файлы теперь находятся в правильных местах
+- ✅ **Обновлены зависимости** - совместимость с последними версиями n8n
+- ✅ **Добавлена операция Health Check** - для проверки состояния сервиса
+- ✅ **Улучшена документация** - подробные инструкции по установке и использованию
+
+## 🛠️ Разработка
+
+### Требования
+
+- Node.js 16+
+- npm 7+
+- TypeScript 4+
+
+### Установка зависимостей
 
 ```bash
 npm install
+```
+
+### Сборка
+
+```bash
 npm run build
 ```
 
-To run in development mode:
-
-```bash
-npm run dev
-```
-
-To run tests:
+### Тестирование
 
 ```bash
 npm test
 ```
 
-## License
+### Публикация
 
-MIT
+```bash
+npm version patch
+npm publish
+```
+
+## 📚 Документация
+
+- [Установка](./INSTALLATION.md)
+- [Примеры использования](./USAGE_EXAMPLES.md)
+- [Быстрый старт](./QUICK_START.md)
+- [Публикация](./PUBLISH.md)
+
+## 🤝 Вклад
+
+Добро пожаловать в проект! Пожалуйста, ознакомьтесь с [CONTRIBUTING.md](./CONTRIBUTING.md) перед внесением изменений.
+
+## 📄 Лицензия
+
+Этот проект лицензирован под [MIT License](./LICENSE).
+
+## 🔗 Ссылки
+
+- [OpenSERP](https://github.com/sergeevgit1/openserp)
+- [n8n](https://n8n.io/)
+- [npm пакет](https://www.npmjs.com/package/n8n-nodes-openserp)
+
+## 🐛 Проблемы
+
+Если вы обнаружили проблему, пожалуйста, создайте [issue](https://github.com/sergeevgit1/openserp/issues) с подробным описанием.
+
+## 📞 Поддержка
+
+Для получения поддержки:
+1. Проверьте [документацию](./README.md)
+2. Посмотрите [примеры](./USAGE_EXAMPLES.md)
+3. Создайте [issue](https://github.com/sergeevgit1/openserp/issues)

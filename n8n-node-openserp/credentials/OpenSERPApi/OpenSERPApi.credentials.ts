@@ -27,7 +27,7 @@ export class OpenSERPApi implements ICredentialType {
 				password: true,
 			},
 			default: '',
-			description: 'API Key for authentication (if required)',
+			description: 'API Key for authentication (optional)',
 		},
 	];
 
